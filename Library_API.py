@@ -197,8 +197,81 @@ class Borrowed(Resource):
     def push(self):
         return 401
 
+# Class for interacting with available books collection
+class Comments(Resource):
+    def get(self):
+        client = MongoClient('localhost', 27017)
+        db = client['Laiberi']
+        collection = db['comments']
+        # had to make id not show, because it threw a not json serializable error.
+        retrieved = list(collection.find({}, {'_id' : False}))
+        return retrieved, 200
+
+    def post(self):
+        # Require these args for the POST request.
+        parser = reqparse.RequestParser()
+        parser.add_argument('Commenter', required = True)
+        parser.add_argument('Message', required = True)
+
+        args = parser.parse_args()
+
+        client = MongoClient('localhost', 27017)
+        db = client['Laiberi']
+        collection = db['comments']
+        new_book = collection.insert_one({
+            'Commenter' : args['commenter'],
+            'Message' : args['message'],     
+        })    
+        retrieved = list(collection.find({}, {'_id' : False}))
+        return retrieved, 200
+    
+    def put(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('Commenter', required = True)
+        parser.add_argument('Message', required = True)
+
+        args = parser.parse_args()
+
+        if args['name'] in list(collection['Name']):
+            client = MongoClient('localhost', 27017)
+            db = client['Laiberi']
+            collection = db['booksAvail']
+            updateBook = collection.find_one_and_replace({
+                'Commenter' : args['commenter'],
+                'Message' : args['message'],     
+        })    
+
+        retrieved = list(collection.find({}, {'_id' : False}))
+
+
+        return retrieved, 200
+
+    def delete(self):
+    # Require these args for the DELETE request.
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('Commenter', required = True)
+        parser.add_argument('Message', required = True)
+        args = parser.parse_args()
+
+        client = MongoClient('localhost', 27017)
+        db = client['Laiberi']
+        collection = db['booksAvail']
+        removeBook = collection.find_one_and_delete({
+            'Commenter' : args['commenter'],
+            'Message' : args['message'],          
+        })    
+        retrieved = list(collection.find({}, {'_id' : False}))
+        return retrieved, 200
+        
+
+    def push(self):
+        return 401
+
 api.add_resource(Available, '/available')
 api.add_resource(Borrowed, '/borrowed')
+api.add_resource(Comments, '/comments')
+
 
 # Runs on port 8080!!
 if __name__ == "__main__":
