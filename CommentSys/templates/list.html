@@ -1,22 +1,21 @@
-{% extends "layout.html" %}
 
-{% block head %}
   <title>Messages</title>
-{% endblock %}
 
-{% block body %}
   <h2>Messages</h2>
-  {% if messages %}
-    <ul>
-      {% for message in messages %}
-        <li>
-          <h5>{ messages[message].who }</h5> 
-          <p>{ messages[message].body }</p>
-        </li>
-      {% endfor %}
+  <script>  
+    if (messages) {
+      <ul>
+        messages.forEach(message){
+          <li>
+            <h5>{{messages[messages[1]].who }}</h5> 
+            <p>{{ messages[messages[1]].body}}</p>
+          </li>
+        }
+       
     </ul>
-  {% else %}
-    No messages!
-  {% endif %}
+  }
+    else {
+      <p>{{'No Messages!'}}</p>
+    }
+  </script>
   <a href="{{ url_for('index') }}">Go back to the main page</a>
-{% endblock %}

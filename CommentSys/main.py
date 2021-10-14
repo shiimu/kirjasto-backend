@@ -14,6 +14,7 @@ def messages():
     db = client['Laiberi']
     collection = db['comments']
     result = list(collection.find({}, {'_id' : False}))
+    
     return render_template('list.html', messages=result)
 
 @app.route('/submit_message', methods=['POST'])
