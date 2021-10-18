@@ -46,7 +46,8 @@ class Available(Resource):
             'About' : args['about'],
             'Tags' : args['tags'],            
             'Description' : args['description']        
-        })    
+            
+            })    
         retrieved = list(collection.find({}, {'_id' : False}))
         return retrieved, 200
     
@@ -197,7 +198,7 @@ class Borrowed(Resource):
     def push(self):
         return 401
 
-# Class for interacting with available books collection
+# Class for interacting with comments collection
 class Comments(Resource):
     def get(self):
         client = MongoClient('localhost', 27017)
@@ -210,8 +211,8 @@ class Comments(Resource):
     def post(self):
         # Require these args for the POST request.
         parser = reqparse.RequestParser()
-        parser.add_argument('Commenter', required = True)
-        parser.add_argument('Message', required = True)
+        parser.add_argument('commenter', required = True)
+        parser.add_argument('message', required = True)
 
         args = parser.parse_args()
 
@@ -227,8 +228,8 @@ class Comments(Resource):
     
     def put(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('Commenter', required = True)
-        parser.add_argument('Message', required = True)
+        parser.add_argument('commenter', required = True)
+        parser.add_argument('message', required = True)
 
         args = parser.parse_args()
 
@@ -250,8 +251,8 @@ class Comments(Resource):
     # Require these args for the DELETE request.
 
         parser = reqparse.RequestParser()
-        parser.add_argument('Commenter', required = True)
-        parser.add_argument('Message', required = True)
+        parser.add_argument('commenter', required = True)
+        parser.add_argument('message', required = True)
         args = parser.parse_args()
 
         client = MongoClient('localhost', 27017)
