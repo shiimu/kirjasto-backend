@@ -8,11 +8,11 @@ GET, POST, PUT, DELETE
 
 POST, PUT and DELETE currently require all of the arguments listed below
 
-available - lists all the books available for loaning.
+available - lists all the books available for loaning. <br />
 arguments: name, writer, year, isbn, rating, about, tags, description
 
-borrowed - lists all the books that are currently being loaned out.
+borrowed - lists all the books that are currently being loaned out. <br />
 arguments: name, writer, year, isbn, rating, about, tags, description, borrower
 
-comments - lists all the comments.
+comments - lists all the comments. <br />
 arguments: commenter, message
