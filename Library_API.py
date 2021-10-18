@@ -33,21 +33,33 @@ class Available(Resource):
         parser.add_argument('description', required = True)
 
         args = parser.parse_args()
-
+        
+# Checking if the book name already exists.        
         client = MongoClient('localhost', 27017)
         db = client['Laiberi']
         collection = db['booksAvail']
-        new_book = collection.insert_one({
-            'Name' : args['name'],
-            'Writer' : args['writer'],
-            'Year' : args['year'],
-            'ISBN' : args['isbn'],
-            'Rating' : args['rating'],
-            'About' : args['about'],
-            'Tags' : args['tags'],            
-            'Description' : args['description']        
+        retrieved = list(collection.find({}, {'_id' : False}))
+        for name in retrieved:
+
+            if args['name'] in name['Name']:
+                return {
+                     'message': f"'{args['name']}' already exists."
+                }, 401
+        else:
+            client = MongoClient('localhost', 27017)
+            db = client['Laiberi']
+            collection = db['booksAvail']
+            new_book = collection.insert_one({
+                'Name' : args['name'],
+                'Writer' : args['writer'],
+                'Year' : args['year'],
+                'ISBN' : args['isbn'],
+                'Rating' : args['rating'],
+                'About' : args['about'],
+                'Tags' : args['tags'],            
+                'Description' : args['description']        
             
-            })    
+                })    
         retrieved = list(collection.find({}, {'_id' : False}))
         return retrieved, 200
     
@@ -141,21 +153,34 @@ class Borrowed(Resource):
 
         args = parser.parse_args()
 
+        
+# Checking if the book name already exists.        
         client = MongoClient('localhost', 27017)
         db = client['Laiberi']
-        collection = db['booksBorrow']
-        new_book = collection.insert_one({
-            'Name' : args['name'],
-            'Writer' : args['writer'],
-            'Year' : args['year'],
-            'ISBN' : args['isbn'],
-            'Rating' : args['rating'],
-            'About' : args['about'],
-            'Tags' : args['tags'],            
-            'Description' : args['description'],  
-            'Borrower' : args['borrower']        
-      
-        })    
+        collection = db['booksAvail']
+        retrieved = list(collection.find({}, {'_id' : False}))
+        for name in retrieved:
+
+            if args['name'] in name['Name']:
+                return {
+                     'message': f"'{args['name']}' already exists."
+                }, 401
+        else:
+            client = MongoClient('localhost', 27017)
+            db = client['Laiberi']
+            collection = db['booksAvail']
+            new_book = collection.insert_one({
+                'Name' : args['name'],
+                'Writer' : args['writer'],
+                'Year' : args['year'],
+                'ISBN' : args['isbn'],
+                'Rating' : args['rating'],
+                'About' : args['about'],
+                'Tags' : args['tags'],            
+                'Description' : args['description']        
+            
+                })    
+
         retrieved = list(collection.find({}, {'_id' : False}))
         return retrieved, 200
     
