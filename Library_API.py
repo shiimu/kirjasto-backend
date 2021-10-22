@@ -157,7 +157,7 @@ class Borrowed(Resource):
 # Checking if the book name already exists.        
         client = MongoClient('localhost', 27017)
         db = client['Laiberi']
-        collection = db['booksAvail']
+        collection = db['booksBorrow']
         retrieved = list(collection.find({}, {'_id' : False}))
         for name in retrieved:
 
@@ -168,7 +168,39 @@ class Borrowed(Resource):
         else:
             client = MongoClient('localhost', 27017)
             db = client['Laiberi']
-            collection = db['booksAvail']
+            collection = db['booksBorrow']
+            new_book = collection.insert_one({
+                'Name' : args['name'],
+                'Writer' : args['writer'],
+                'Year' : args['year'],
+                'ISBN' : args['isbn'],
+                'Rating' : args['rating'],
+                'About' : args['about'],
+                'Tags' : args['tags'],            
+                'Description' : args['description'],
+                'Borrower' : args['borrower']
+            
+                })    
+
+        retrieved = list(collection.find({}, {'_id' : False}))
+        return retrieved, 200
+    
+    def put(self):
+# Checking if the book name already exists.        
+        client = MongoClient('localhost', 27017)
+        db = client['Laiberi']
+        collection = db['booksBorrow']
+        retrieved = list(collection.find({}, {'_id' : False}))
+        
+        for name in retrieved:
+            if args['name'] in name['Name']:
+                return {
+                     'message': f"'{args['name']}' already exists."
+                }, 401
+        else:
+            client = MongoClient('localhost', 27017)
+            db = client['Laiberi']
+            collection = db['booksBorrow']
             new_book = collection.insert_one({
                 'Name' : args['name'],
                 'Writer' : args['writer'],
@@ -183,10 +215,6 @@ class Borrowed(Resource):
 
         retrieved = list(collection.find({}, {'_id' : False}))
         return retrieved, 200
-    
-    def put(self):
-        return 401
-
     def delete(self):
        # Require these args for the DELETE request.
 
